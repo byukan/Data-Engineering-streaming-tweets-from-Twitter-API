@@ -1,0 +1,12 @@
+CREATE MATERIALIZED VIEW [ IF NOT EXISTS ] tweets
+    [ (tweet_id [, ...] ) ]
+    [ WITH ( storage_parameter [= value] [, ... ] ) ]
+    [ TABLESPACE tablespace_name ]
+    AS query
+    [ WITH [ NO ] DATA ]
+
+#select json_array_elements(status->'entities'->'hashtags')->'text' from raw_tweets
+#where status->'entities'->'hashtags' is not null
+#limit 10000;
+
+#select count(1) from raw_tweets;

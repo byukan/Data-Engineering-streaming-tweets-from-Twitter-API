@@ -1,0 +1,229 @@
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ clear
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ export LC_CTYPE=C
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ wget https://s3-us-west-2.amazonaws.com/dsci/6007/data/shakespeare-sonnets.txt
+--2017-01-24 12:48:41--  https://s3-us-west-2.amazonaws.com/dsci/6007/data/shakespeare-sonnets.txt
+Resolving s3-us-west-2.amazonaws.com... 54.231.168.224
+Connecting to s3-us-west-2.amazonaws.com|54.231.168.224|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 95726 (93K) [text/plain]
+Saving to: ‘shakespeare-sonnets.txt’
+
+shakespeare-sonnets.tx 100%[=========================>]  93.48K  --.-KB/s    in 0.08s
+
+2017-01-24 12:48:42 (1.18 MB/s) - ‘shakespeare-sonnets.txt’ saved [95726/95726]
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ ls -al
+total 192
+drwxr-xr-x  3 yun  staff    102 Jan 24 12:48 .
+drwxr-xr-x  7 yun  staff    238 Jan 24 12:28 ..
+-rw-r--r--  1 yun  staff  95726 Aug 25  2015 shakespeare-sonnets.txt
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ head shakespeare-sonnets.txt
+THE SONNETS
+by William Shakespeare
+
+I
+
+From fairest creatures we desire increase,
+That thereby beauty's rose might never die,
+But as the riper should by time decease,
+His tender heir might bear his memory:
+But thou contracted to thine own bright eyes,
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | head
+
+I
+
+From fairest creatures we desire increase,
+That thereby beauty's rose might never die,
+But as the riper should by time decease,
+His tender heir might bear his memory:
+But thou contracted to thine own bright eyes,
+Feed'st thy light's flame with self-substantial fuel,
+Making a famine where abundance lies,
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | head
+
+i
+
+from fairest creatures we desire increase,
+that thereby beauty's rose might never die,
+but as the riper should by time decease,
+his tender heir might bear his memory:
+but thou contracted to thine own bright eyes,
+feed'st thy light's flame with self-substantial fuel,
+making a famine where abundance lies,
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | head
+
+i
+from
+fairest
+creatures
+we
+desire
+increase
+that
+thereby
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | sort | head
+
+a
+a
+a
+a
+a
+a
+a
+a
+a
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | sort | uniq | head
+
+a
+abhor
+abide
+able
+about
+above
+absence
+absent
+abundance
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt |  tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | uniq | sort | head
+
+a
+a
+a
+a
+a
+a
+a
+a
+a
+
+Question: Is this the optimal order for the pipeline? Would it be better to first use 'uniq' and then 'sort'?
+>tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | sort | uniq | head is optimal order than to first use 'uniq' and then 'sort'.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | sort | uniq | wc -w
+    3202
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | sort | uniq -c | head
+   1
+ 164 a
+   2 abhor
+   2 abide
+   1 able
+   1 about
+   4 above
+   5 absence
+   4 absent
+   4 abundance
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | tr 'A-Z' 'a-z' | tr -sc 'a-z' '\012' | sort | uniq | rev | sort | rev | head
+
+a
+plea
+sea
+yea
+robb
+lamb
+climb
+tomb
+womb
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | awk '{print $1}' | head
+
+I
+
+From
+That
+But
+His
+But
+Feed'st
+Making
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | awk '{print $1}' | sort | uniq -c | head
+ 310
+   2 'Fair,
+   1 'Gainst
+   1 'Had
+   2 'I
+   1 'Since
+   1 'Thus
+   1 'Thy
+   3 'Tis
+   1 'Truth
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ tail -n +3 shakespeare-sonnets.txt | awk '{print $1}' | sort | tr -d '[:punct:]' | uniq -c | head
+ 310
+   2 Fair
+   1 Gainst
+   1 Had
+   2 I
+   1 Since
+   1 Thus
+   1 Thy
+   3 Tis
+   1 Truth
+
+
+1. Download NASA log file.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ wget http://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz
+--2017-01-24 13:03:42--  http://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz
+Resolving ita.ee.lbl.gov... 131.243.2.164, 2620:83:8000:102::a4
+Connecting to ita.ee.lbl.gov|131.243.2.164|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 20676672 (20M) [application/x-gzip]
+Saving to: ‘NASA_access_log_Jul95.gz’
+
+NASA_access_log_Jul95. 100%[=========================>]  19.72M  2.96MB/s    in 5.5s
+
+2017-01-24 13:03:47 (3.55 MB/s) - ‘NASA_access_log_Jul95.gz’ saved [20676672/20676672]
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ ls -al
+total 40584
+drwxr-xr-x  4 yun  staff       136 Jan 24 13:03 .
+drwxr-xr-x  7 yun  staff       238 Jan 24 12:28 ..
+-rw-r--r--  1 yun  staff  20676672 Apr 25  1996 NASA_access_log_Jul95.gz
+-rw-r--r--  1 yun  staff     95726 Aug 25  2015 shakespeare-sonnets.txt
+
+2. gunzip NASA log file, then write to nasa.txt file.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ gunzip -c NASA_access_log_Jul95.gz > nasa.txt
+
+3. Find the total number lines in the files.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ ls -al
+total 441448
+drwxr-xr-x  5 yun  staff        170 Jan 24 13:29 .
+drwxr-xr-x  7 yun  staff        238 Jan 24 12:28 ..
+-rw-r--r--  1 yun  staff   20676672 Apr 25  1996 NASA_access_log_Jul95.gz
+-rw-r--r--  1 yun  staff  205242368 Jan 24 13:29 nasa.txt
+-rw-r--r--  1 yun  staff      95726 Aug 25  2015 shakespeare-sonnets.txt
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ cat nasa.txt | wc -l
+ 1891714
+
+4. Find the total number of server errors in the file. This means that you will be including status codes in the range from 400-499.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ cat nasa.txt | awk '{print $9}' | head
+200
+200
+200
+304
+200
+304
+200
+200
+200
+200
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ gunzip -c NASA_access_log_Jul95.gz | awk '{print $(NF-1)}' | grep '4[0-9][0-9]' | wc -l
+   10904
+
+5. Find the total number of server errors in the file. This means that you will be including status codes in the range from 500-599.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ gunzip -c NASA_access_log_Jul95.gz | awk '{print $(NF-1)}' | grep '5[0-9][0-9]' | wc -l
+      76
+
+6. The total count of all the different status codes in the NASA_access_log_Jul95.gz file.
+
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ gunzip -c NASA_access_log_Jul95.gz | awk '{print $(NF-1)}' | grep '[0-9][0-9][0-9]' | wc -l
+ 1891714
+(dsci6007) Yunsupui-MacBook-Pro:lab yun$ gunzip -c NASA_access_log_Jul95.gz | awk '{print $(NF-1)}' | grep '[1-5][0-9][0-9]' | wc -l
+ 1891714

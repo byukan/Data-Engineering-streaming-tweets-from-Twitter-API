@@ -1,0 +1,72 @@
+#!/usr/bin/python
+
+# Streaming Tweets into Mongo
+#
+# Starting with the EC2 instance you launched earlier in this course:
+#
+#     Install MongoDB
+#
+#     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+#
+#     echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+#
+#     sudo apt-get update
+#
+#     sudo apt-get install -y mongodb-org
+
+#
+# The TwitterStream class
+#
+# The TwitterStream object is an interface to the Twitter Stream API. This can be used pretty much the same as the Twitter class, except the result of calling a method will be an iterator that yields objects decoded from the stream. For example::
+
+# import twitter
+#
+# twitter_stream = TwitterStream(auth=OAuth(...))
+# iterator = twitter_stream.statuses.sample()
+#
+# for tweet in iterator:
+#     ...do something with this tweet...
+
+
+# coding: utf-8
+
+# In[1]:
+
+# https://github.com/justwjr/DSCI6007-student/blob/master/The%20Internet/lab.md
+import os
+import yaml
+
+import pymongo
+
+credentials = yaml.load(open(os.path.expanduser('~/api_cred.yml')))
+
+credentials['twitter'].get('consumer_key')
+
+# https://github.com/ideoforms/python-twitter-examples/blob/master/twitter-trends.py
+
+from twitter import *
+
+
+client = pymongo.MongoClient('localhost', 27017)
+
+db = client.twitter_db
+
+#-----------------------------------------------------------------------
+# load our API credentials
+#-----------------------------------------------------------------------
+# config = {}
+# execfile("config.py", config)
+
+#-----------------------------------------------------------------------
+# create twitter API object
+#-----------------------------------------------------------------------
+twitter_stream = TwitterStream(auth = OAuth(credentials['twitter'].get('token'),
+                               credentials['twitter'].get('token_secret'),
+                               credentials['twitter'].get('consumer_key'),
+                               credentials['twitter'].get('consumer_secret'))
+)
+
+iterator = twitter_stream.statuses.sample()
+
+for tweet in iterator:
+    db.tweets.insert_one(tweet)
